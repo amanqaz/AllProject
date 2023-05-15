@@ -1,6 +1,8 @@
 package com.Aman.Instagram.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,7 +24,8 @@ public class User {
     private String firstName;
     private String lastName;
     private String password;
-   @NotNull
+    @Email
+    @NotNull
     private String email;
     private String phoneNumber;
     @OneToOne(mappedBy = "user")

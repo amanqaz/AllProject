@@ -3,6 +3,8 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+
+import com.Aman.Instagram.DTO.PasswordUtils;
 import com.Aman.Instagram.DTO.SignIn;
 import com.Aman.Instagram.model.User;
 import com.Aman.Instagram.repositatory.IUserRepo;
@@ -20,6 +22,8 @@ import java.util.Base64;
 
 @Service
 public class UserService {
+    @Autowired
+    private PasswordUtils passwordUtils;
 
     @Autowired
     IUserRepo userRepo;
@@ -29,6 +33,8 @@ public class UserService {
 
 
     private static final String SECRET_KEY = "my-secret-key";
+
+
     public ResponseEntity<String> signUp(User user) throws Exception {
         User repoUser = userRepo.findByemail ( user.getEmail ( ) );
         System.out.print(repoUser);
@@ -65,36 +71,82 @@ public class UserService {
 
     }
 
+    private boolean isPresent(String email){
+        User dbUser=  userRepo.findByemail ( email );
+        if(dbUser == null ) return  false;
+        return true;
+
+    }
+
     public ResponseEntity<String> signIn(SignIn credential) {
 
         String response ="user Or password invalid please check credential or try to signin";
         HttpStatus status = HttpStatus.BAD_REQUEST;
 
         String credentialEmail = credential.getEmail ();
-       User dbUser=  userRepo.findByemail ( credentialEmail );
-       if(dbUser ==null){
-           return ResponseEntity.badRequest().body ( response );
-       }else{
-           String tempPassword  = credential.getPassword ();
-           String dbPassword = dbUser.getPassword ();
-
-               tempPassword = encryption ( tempPassword );
-               BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-               boolean matches = encoder.matches(tempPassword, dbPassword);
-              if(matches) {
-                  response = tempPassword;
-                  status = HttpStatus.ACCEPTED;
 
 
-                      String token = dbUser.getToken ( ).getToken ( );
-                      response = token;
-                      return ResponseEntity.ok ( response );
+       if(isPresent ( credentialEmail )){
+
+            boolean passwordVerified =   verificationUser ( credentialEmail,credential.getPassword () );
+
+           if(passwordVerified) {
+
+               status = HttpStatus.ACCEPTED;
+               User dbUser=  userRepo.findByemail (credentialEmail );
 
 
-              }else{
-
-               return ResponseEntity.status ( status ).body ( response );
-           }
+               String token = dbUser.getToken ( ).getToken ( );
+               response = token;
+               return ResponseEntity.ok ( response );
        }
+       }
+        return ResponseEntity.status ( status ).body ( response );
     }
+
+    public ResponseEntity<String> updateEmail(String oldEmail, String newEmail, String password) {
+        boolean entryCheck = isPresent ( oldEmail );
+        if (entryCheck) {
+            boolean match = verificationUser ( oldEmail, password );
+            if (match) {
+                User dbUser = userRepo.findByemail ( oldEmail );
+
+                dbUser.setEmail ( newEmail );
+                userRepo.save ( dbUser );
+
+                return ResponseEntity.status ( HttpStatus.ACCEPTED ).body ( "Email updated" );
+
+
+            }
+        }
+         return   ResponseEntity.status ( HttpStatus.BAD_REQUEST ).body ( "Invalid user or Password please try again" );
+
+    }
+//    private  boolean (String email,String password){
+//        User dbUser=  userRepo.findByemail ( email );
+//
+//        String tempPassword  = password;
+//        String dbPassword = dbUser.getPassword ();
+//
+//        tempPassword = encryption ( tempPassword );
+//        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+//        boolean matches = encoder.matches(tempPassword, dbPassword);
+//        if(matches) return  true;
+//        return false;
+//    }
+
+    public boolean verificationUser(String email, String password) {
+        User dbUser=  userRepo.findByemail ( email );
+
+        String encryptedPassword = dbUser.getPassword ();
+        return passwordUtils.matchPassword(password, encryptedPassword);
+    }
+
+    public User getUserByEmail(String email) {
+        return  userRepo.findByemail ( email );
+
+
+    }
+
+
 }

@@ -25,5 +25,8 @@ public class Post {
     @ManyToOne(fetch = FetchType.LAZY)
     private User users;
 
-
+    public Post(String postData, User users) {
+        this.postData = postData;
+        this.users = users;
+    }
 }
