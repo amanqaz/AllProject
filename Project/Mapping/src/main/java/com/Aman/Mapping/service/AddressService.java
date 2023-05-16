@@ -15,10 +15,38 @@ public class AddressService {
     StudentService studentService;
     public void insertAddress(Address address , Long id) {
         Student student = studentService.findById(id);
+        if(student!=null) {
+            address.setStudent ( student );
 
-        address.setStudent ( student );
+            iAddressRepo.save ( address );
+        }
 
-        iAddressRepo.save ( address );
+    }
+
+    public Address getAddressById(Long id) {
+
+        Student student = studentService.findById(id);
+        if(student!=null) {
+            return student.getAddress ( );
+        }
+        return null;
+    }
+
+    public void deleteAddressById(Long id) {
+        Student student = studentService.findById(id);
+        if(student!=null) {
+            Long addressId = student.getAddress ( ).getAddressId ( );
+            iAddressRepo.deleteById ( addressId );
+
+        }
+    }
+
+    public void updateAddressById(Address address, Long id) {
+        Student student = studentService.findById(id);
+        if(student!=null) {
+            insertAddress(address,id);
+
+        }
 
     }
 }

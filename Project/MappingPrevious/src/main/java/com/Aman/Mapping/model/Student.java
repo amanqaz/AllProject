@@ -1,7 +1,5 @@
 package com.Aman.Mapping.model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,11 +11,6 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "address")
-
-
-
 public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,15 +21,15 @@ public class Student {
     private String branch;
     private String department;
 
-    @OneToOne(mappedBy = "student",cascade = CascadeType.REMOVE)
+    @OneToOne(mappedBy = "student"cas)
     private Address address;
 
-    @OneToOne(mappedBy = "student",cascade = CascadeType.REMOVE)
+    @OneToOne(mappedBy = "student")
     private Laptop laptop;
 
-    @ManyToMany(mappedBy = "studentList",cascade = CascadeType.REMOVE)
+    @ManyToMany(mappedBy = "studentList")
     private List<Course> course;
 
-    @OneToMany(mappedBy = "student",cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "student")
     private List<Book> books;
 }

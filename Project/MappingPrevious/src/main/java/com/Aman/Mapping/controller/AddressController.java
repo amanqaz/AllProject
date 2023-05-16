@@ -15,19 +15,4 @@ public class AddressController {
     public void addAddress(@RequestBody  Address address, @PathVariable Long id){
         addressService.insertAddress(address,id);
     }
-
-    @GetMapping("/getAddressById/{id}")
-    public Address getAddressById(@PathVariable Long id){
-        return addressService.getAddressById(id);
-    }
-
-    @DeleteMapping("deleteAddress/{id}")
-    public void deleteAddressById(@PathVariable Long id){
-        addressService.deleteAddressById(id);
-    }
-    @PutMapping("updateAddress/{id}")
-    public void updateAddress(@RequestBody Address address, @PathVariable Long id){
-        addressService.updateAddressById(address,id);
-    }
-
 }
