@@ -1,144 +1,72 @@
-<center>
-<h1> INSTAGRAM CLONE </h1>
-</center>
-<center>
-<a href="Java url">
-    <img alt="Java" src="https://img.shields.io/badge/Java->=8-darkblue.svg" />
-</a>
-<a href="Maven url" >
-    <img alt="Maven" src="https://img.shields.io/badge/Maven-3.0.6-brightgreen.svg" />
-</a>
-   <a >
-    <img alt="MySQL" src="https://img.shields.io/badge/MySQL-blue.svg">
-  </a>
-</center>
-This project is a basic web application that allows users to sign in, sign up, and manage their profile information. Additionally, users can create posts and view posts created by other users. The application uses authentication tokens to secure user data and ensure that only authenticated users can access certain features of the application.
+Instagram Basic Design - Part 1</h1>
+This project is aimed at creating the basic design of the backend of Instagram. This Readme.md file will guide you through the project setup, the models used, and the API endpoints available.
 
----
-<br>
+>### Prerequisites
+* ![MySql](https://img.shields.io/badge/DBMS-MYSQL%205.7%20or%20Higher-red)
+ * ![SpringBoot](https://img.shields.io/badge/Framework-SpringBoot-green)
 
-## Framework Used
-* Spring Boot
+* ![Java](https://img.shields.io/badge/Language-Java%208%20or%20higher-yellow)
 
----
-<br>
+>## Installation
+To run this application locally, you will need to have Java and MySQL installed on your machine.
 
-## Dependencies
-The following dependencies are required to run the project:
+* Clone the repository to your local machine.
+* Create a new MySQL database called `Insta`
+* Update the `application.properties` file in the `src/main/resources` directory to include your MySQL username and password
+* Run the application using your IDE or by running the command `mvn spring-boot:run` in the project directory
+* Access the APIs using any HTTP client such as Postman or cURL.
+>## Data flow
+ The application is built using the SpringBoot framework and consists of four layers: DTO, model, service, and repository.-
+* **DTO** -The DTO layer consists of classes that are used to transfer data between different layers of the application
+* **Controller** - The controller layer handles the HTTP requests, translates the JSON parameter to object, and authenticates the request and transfer it to the business (service) layer. In short, it consists of views i.e., frontend part.
+* **Service** -The business layer handles all the business logic. It consists of service classes and uses services provided by data access layers.
+* **Repository** - This layer mainatains the h2-database thing on which CRUD operations are performed
+* **Model** - This layer consists basically the class level things- the various classes required for the project and these classes consists the attributes to be stored.
 
-* Spring Boot Dev Tools
-* Spring Web
-* Spring Data JPA
-* MySQL Driver
-* Lombok
-* Validation
-* Swagger
+>## API Documentation
+The API endpoints will be available at http://localhost:8080.
+#### Endpoints
+>User Controller
+This controller includes the following endpoints for user authentication:
 
-<br>
+* POST /auth/signup: create a new user account
+* POST /auth/signin: log in an existing user and generate an authentication token
+* PUT /auth/user: update user information
 
-## Database Configuration
-To connect to a MySQL database, update the application.properties file with the appropriate database URL, username, and password. The following properties need to be updated:
-```
-spring.datasource.driverClassName=com.mysql.cj.jdbc.Driver
-spring.datasource.url = jdbc:mysql://localhost:3306/<DatabaseName>
-spring.datasource.username = <userName>
-spring.datasource.password = <password>
-spring.jpa.show-sql = true
-spring.jpa.hibernate.ddl-auto = update
+>Post Controller
+This controller includes the following endpoints for posts:
 
-spring.jpa.properties.hibernate.show_sql=true
-spring.jpa.properties.hibernate.use_sql_comments=true
-spring.jpa.properties.hibernate.format_sql=true
+* POST /post: create a new post
+* GET /post/{postId}: get a specific post by ID
+>### Schemas
+This project is aimed at creating the basic design of the backend of Instagram. This Readme.md file will guide you through the project setup, the models used, and the API endpoints available.
+## Models
 
-```
-<br>
+>User Model
+*  firstName
 
-## Language Used
-* Java
+*  lastName	
 
----
-<br>
+* age
 
-## Data Model
+* email;
+* phoneNumber;
 
-The Job data model is defined in the Job class, which has the following attributes:
-<br>
+>Post Model
+* postId
 
-* User Model
-```
-Id : integer
-firstName : string
-lastName : string
-age : integer
-email : string
-password : string
-phoneNumber : string
-```
+* createdDate
 
-* Post Model
-```
-postId = Long
-createdDate : Timestamp
-updatedDate : Timestamp
-postData : String
-@ManyToOne
-user : User
+* updatedDate
 
-```
+* Menu
 
-* Authentication Token
-```
-tokenId : Long
-token : string
-tokenCreationDate : LocalDate
-@OneToOne 
-user : User
-```
-## Data Flow
-
-1. The user at client side sends a request to the application through the API endpoints.
-2. The API receives the request and sends it to the appropriate controller method.
-3. The controller method makes a call to the method in service class.
-4. The method in service class builds logic and retrieves or modifies data from the database, which is in turn given to controller class
-5. The controller method returns a response to the API.
-6. The API sends the response back to the user.
-
----
-
-<br>
+* PostData	
+* User
 
 
-## API End Points
+>## Contributors
+Aman 
 
-The following endpoints are available in the API:
-
-* User Controller:
-```
-POST /user/signup: create a new user account
-POST /user/signin: authenticate a user and receive an authentication token
-PUT /user: update user details
-DELETE /user/signout: authenticate a user and delete authentication token
-```
-
-* Post Controller
-```
-POST /post: create a new post
-GET /post: get all posts
-```
-
-<br>
-
-## DataBase Used
-* SQL database
-```
-We have used Persistent database to implement CRUD Operations.
-```
----
-<br>
-
-## Project Summary
-
-The project is a basic web application built using Java and the Spring framework. It allows users to sign up, sign in, and manage their profile information. Users can also create and view posts. The application uses authentication tokens to secure user data and ensure that only authenticated users can access certain features. The API endpoints include user signup, signin, and update details, post creation and retrieval, and authentication token creation.
-
-
-
+>## Project Summary
+This project includes the basic design of the backend of Instagram, including user and post models, and API endpoints for user authentication and post creation/retrieval. Further improvements can be made to include additional features such as comment and like functionality.
